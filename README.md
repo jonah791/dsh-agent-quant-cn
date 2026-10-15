@@ -1,9 +1,43 @@
+<!--
+  DSH 插件生态公约声明（plugin-ecosystem-convention · 组合优先/声明清晰/兼容优先）
+  purpose: 国内市场量化工具面：把 Windows 侧 CTP JSON CLI（ctp_status / ctp_account）暴露成会话内可直调的工具
+  inject: ['tools']
+  tools: quant_ctp_status,quant_ctp_account
+  runtime: host-only
+  envDeps: 见 README「配置」节
+  boundary: 见 README「设计要点」与「生效判据与回退」节
+  compat: cordis ^4.0.1 / dsh-tools >=0.1.0-rc.6
+-->
 # dsh-agent-quant-cn
+
+<p align="center">
+  <a href="https://github.com/jonah791/dsh-agent-quant-cn"><img src="https://img.shields.io/badge/version-0.1.0-blue" alt="version"></a>
+  <img src="https://img.shields.io/badge/License-MIT-green" alt="license">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6" alt="TypeScript">
+  <img src="https://img.shields.io/badge/tests-22%20passed-brightgreen" alt="tests">
+</p>
 
 国内市场量化系统的**工具面**：把 CTP 模拟盘的操作暴露成会话内可直接调用的 DSH 工具。
 
 它自己不实现任何策略或连接逻辑——那些在 `projects/self/agent-quant/`（Python 数值层 + JSON CLI）。
 本插件只做「工具面 → 取凭据 → CLI → Python」这一层薄转发。
+
+## 快速开始
+
+**1) 装依赖**（在目标 profile 的 `package.json` 加 link 依赖）：
+
+```jsonc
+"dsh-agent-quant-cn": "link:E:/alice/self-plugins/dsh-agent-quant-cn"
+```
+
+**2) 挂组合**：
+
+```yaml
+- id: dsh-agent-quant-cn
+  name: dsh-agent-quant-cn
+```
+
+**3) 30 秒验证**：`quant_ctp_status` → 应返回模拟盘交易前置登录 + 结算确认 + 资金与持仓
 
 ## 能力（工具）
 
@@ -61,3 +95,16 @@
 
 - **只连模拟盘，不碰真钱**。真实下单必须主人逐次授权，且**不走本插件**。
 - 不做策略、不做回测、不下单——这些能力在 Python 层，本插件不复制它们。
+
+## 测试
+
+```bash
+cd self-plugins/dsh-agent-quant-cn && npm test
+```
+
+**22 条用例**（跑一次得到）。
+
+## 相关文档
+
+- [`docs/semantic.md`](docs/semantic.md) —— **权威契约**（定位/反定位 · 验收表）
+- 中心仓：[alice-digital-life](https://github.com/jonah791/alice-digital-life)
