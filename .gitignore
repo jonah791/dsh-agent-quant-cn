@@ -3,3 +3,7 @@ lib/
 *.log
 .pytest_cache/
 __pycache__/
+
+*.tsbuildinfo
+*.bak
+*.bak-*
